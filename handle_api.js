@@ -46,7 +46,7 @@ const mismatch_flag_history = parseInt(req.body.mismatch_flag_history, 10);
       total_monetary_value_of_returns, average_order_value,
       return_frequency_per_month, time_since_last_return,
       customer_tenure_days, number_of_different_categories_returned
-    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15)
   `;
 
   const values = [

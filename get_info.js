@@ -30,10 +30,11 @@ const results=await querry(sql);
   },
   body: JSON.stringify(customer)
 })
-  .then((res) => {
+  .then((resp) => {
    
     
-    return res.json()})
+    return resp.json()
+  })
   .then(data => data.risk_score)
   .catch(err => console.error('❌ Error:', err))
 

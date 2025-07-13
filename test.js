@@ -33,3 +33,6 @@ export const fun=(req,res)=>{
 //     return res.json()})
 //   .then(data => console.log('✅ Server Response:', data))
 //   .catch(err => console.error('❌ Error:', err));
+// import { close_db, querry } from "./db.js";
+// console.log(await querry(`truncate customer_return_profile`));
+// close_db();
