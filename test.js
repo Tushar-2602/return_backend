@@ -1,7 +1,10 @@
 import { json } from "express";
+import { querry } from "./db.js";
 
-export const fun=(req,res)=>{
-    res.send("hellos");
+export const fun=async (req,res)=>{
+    const resp=await querry("select * from customer_return_profile");
+
+    res.json(resp);
 } 
 
 // fetch('https://customer-return-risk-model.onrender.com/predict', {
