@@ -35,7 +35,7 @@ const mismatch_flag_history = parseInt(req.body.mismatch_flag_history, 10);
     time_since_last_return == null || customer_tenure_days == null ||
     number_of_different_categories_returned == null
   ) {
-    return res.status(400).json({ error: 'Missing required fields' });
+    return res.status(404).json({ error: 'Missing required fields' });
   }
 
   const sql = `

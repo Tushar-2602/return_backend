@@ -21,7 +21,33 @@ const send_resp= async (req, res) => {
 const results=await querry(sql);
   try {
       const scores = await Promise.all(
-        results.map(async (customer) => ({
+        results.map(async (customer) => {
+          const ret=await fetch('https://customer-return-risk-model.onrender.com/predict', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify(customer)
+})
+  .then((resp) => {
+   
+    
+    return resp.json()
+  })
+  .then(data => {
+    console.log(data.risk_score);
+    
+    return data.risk_score
+  })
+  .catch(err => console.error('❌ Error:', err))
+
+  if (!(typeof ret === 'number' && !Number.isInteger(ret))) {
+    score =-1;
+    
+  }
+  console.log();
+  
+          return {
           customer_id: customer.customer_id,
           number_of_different_categories_returned: customer.number_of_different_categories_returned,
           customer_tenure_days: customer.customer_tenure_days,
@@ -36,22 +62,9 @@ const results=await querry(sql);
           customer_rating_behavior_score: customer.customer_rating_behavior_score,
           product_category_risk_score: customer.product_category_risk_score,
           return_ratio: customer.return_ratio,
-          score: await fetch('https://customer-return-risk-model.onrender.com/predict', {
-  method: 'POST',
-  headers: {
-    'Content-Type': 'application/json'
-  },
-  body: JSON.stringify(customer)
-})
-  .then((resp) => {
-   
-    
-    return resp.json()
-  })
-  .then(data => data.risk_score)
-  .catch(err => console.error('❌ Error:', err))
+          score: ret
 
-        }))
+        }})
       );
 
       res.json(scores);
