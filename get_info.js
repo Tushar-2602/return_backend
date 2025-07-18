@@ -1,20 +1,24 @@
 import { querry } from "./db.js";
 
-// async function calculateScore(customer) {
-//   // Simulated async logic (e.g., lookup, ML model, external API, etc.)
-//   return new Promise((resolve) => {
-//     const score =
-//       (customer.return_ratio * 20) +
-//       (customer.product_category_risk_score * 15) +
-//       (customer.vague_reason_count * 10) +
-//       (customer.average_return_window * 2) +
-//       (customer.customer_rating_behavior_score * 10) +
-//       (customer.mismatch_flag_history ? 25 : 0) +
-//       (customer.total_monetary_value_of_returns / 1000);
 
-//     resolve(Math.round(score * 100) / 100);
-//   });
+// {
+//   "customer_id": "cust_9aXz21Klm7q8Uf4ve",
+//   "total_orders": 90,
+//   "returns": 40,
+//   "return_ratio": 40,
+//   "product_category_risk_score": 0.75,
+//   "vague_reason_count": 2,
+//   "average_return_window": 7,
+//   "customer_rating_behavior_score": 2.8,
+//   "mismatch_flag_history": 1,
+//   "total_monetary_value_of_returns": 1520.45,
+//   "average_order_value": 635.00,
+//   "return_frequency_per_month": 1.25,
+//   "time_since_last_return": 18,
+//   "customer_tenure_days": 420,
+//   "number_of_different_categories_returned": 4
 // }
+
 const send_resp= async (req, res) => {
   const sql = 'SELECT * FROM customer_return_profile';
 
@@ -22,7 +26,7 @@ const results=await querry(sql);
   try {
       const scores = await Promise.all(
         results.map(async (customer) => {
-          const ret=await fetch('https://customer-return-risk-model.onrender.com/predict', {
+          let ret=await fetch('http://localhost:8000/predict', {
   method: 'POST',
   headers: {
     'Content-Type': 'application/json'
@@ -42,7 +46,7 @@ const results=await querry(sql);
   .catch(err => console.error('❌ Error:', err))
 
   if (!(typeof ret === 'number' && !Number.isInteger(ret))) {
-    score =-1;
+    ret =-1;
     
   }
   console.log();
